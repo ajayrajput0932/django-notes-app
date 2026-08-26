@@ -16,8 +16,31 @@ pipeline {
                 echo "Building Docker images..."
                 sh "docker compose build"
             }
-        }
+        } 
+        
+       stage("Push") {
+    steps {
+        echo "Pushing images to Docker Hub..."
 
+        withCredentials([
+            usernamePassword(
+                credentialsId: "ajaybanna",
+                usernameVariable: "DOCKER_USER",
+                passwordVariable: "DOCKER_TOKEN"
+            )
+        ]) {
+            sh '''
+                echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
+
+                docker push "$DOCKER_USER/notes-nginx:latest"
+                docker push "$DOCKER_USER/django-notes-app:latest"
+
+                docker logout
+            '''
+        }
+    }
+}
+        
         stage("Test") {
             steps {
                 echo "Testing application..."
