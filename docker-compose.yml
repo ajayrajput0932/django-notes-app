@@ -1,7 +1,7 @@
 services:
   nginx:
     build: ./nginx
-    image: nginx
+    image: ajaybanna/notes-nginx:latest
     container_name: nginx_cont
     ports:
       - "80:80"
@@ -14,7 +14,7 @@ services:
   django_app:
     build:
       context: .
-    image: django_app
+    image: ajaybanna/django-notes-app:latest
     container_name: django_cont
     expose:
       - "8000"
